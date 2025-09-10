@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Instagram Clone</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <!-- Tambahkan font Billabong CDN -->
+    <link href="https://fonts.cdnfonts.com/css/billabong" rel="stylesheet">
+    <style>
+        body {
+            background-color: #000;
+            color: #fff;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+        
+        .sidebar {
+            background-color: #000;
+            border-right: 1px solid #262626;
+            height: 100vh;
+            position: fixed;
+            width: 250px;
+            padding: 20px 0;
+        }
+        
+        .main-content {
+            margin-left: 250px;
+            background-color: #000;
+            min-height: 100vh;
+        }
+        
+        .logo {
+            font-family: 'Billabong', cursive;
+            font-size: 2.5rem;
+            color: #fff;
+            text-decoration: none;
+            padding: 20px;
+            letter-spacing: 2px; 
+        }
+        
+        .nav-item {
+            padding: 12px 24px;
+            color: #fff;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            transition: background-color 0.2s;
+        }
+        
+        .nav-item:hover {
+            background-color: #1a1a1a;
+            color: #fff;
+            text-decoration: none;
+        }
+        
+        .nav-item i {
+            margin-right: 16px;
+            font-size: 24px;
+            width: 24px;
+        }
+        
+        .profile-header {
+            padding: 40px 20px;
+            max-width: 935px;
+            margin: 0 auto;
+        }
+        
+        .profile-pic {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        
+        .profile-stats span {
+            margin-right: 40px;
+        }
+        
+        .profile-stats .number {
+            font-weight: bold;
+            color: #fff;
+        }
+        
+        .profile-tabs {
+            border-top: 1px solid #262626;
+            display: flex;
+            justify-content: center;
+        }
+        
+        .profile-tab {
+            padding: 16px;
+            color: #8e8e8e;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .profile-tab.active {
+            color: #fff;
+            border-top: 1px solid #fff;
+        }
+        
+        .profile-tab i {
+            margin-right: 6px;
+        }
+        
+        .posts-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 4px;
+            max-width: 935px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        .post-item {
+            aspect-ratio: 1;
+            background-color: #262626;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .post-placeholder {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #8e8e8e;
+        }
+        
+        .notification-dot {
+            background-color: #ff3040;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            position: absolute;
+            top: 8px;
+            right: 8px;
+        }
+        
+        .btn-follow {
+            background-color: #262626;
+            color: white;
+            border: none;
+            padding: 8px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 14px;
+        }
+        
+        .btn-message {
+            background-color: #262626;
+            color: white;
+            border: 1px solid #262626;
+            padding: 8px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 14px;
+        }
+        
+        .story-highlights {
+            padding: 20px 0;
+        }
+        
+        .highlight-item {
+            display: inline-block;
+            text-align: center;
+            margin-right: 20px;
+            position: relative;
+        }
+        
+        .highlight-pic {
+            width: 87px;
+            height: 87px;
+            border-radius: 50%;
+            border: 2px solid #262626;
+            padding: 2px;
+            background-color: #262626;
+        }
+        
+        .highlight-name {
+            font-size: 12px;
+            color: #fff;
+            margin-top: 8px;
+        }
+
+        .highlight-circle {
+            width: 87px;
+            height: 87px;
+            border-radius: 50%;
+            border: 2px solid #262626;
+            background-color: #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            color: #fff;
+            cursor: pointer;
+            margin: 0 auto;
+        }
+
+        .highlight-circle:hover {
+            background-color: #1a1a1a;
+        }
+
+        .delete-highlight {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: #ff3040;
+            color: white;
+            border-radius: 50%;
+            font-size: 14px;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        #highlightContainer {
+            display: flex;
+            flex-direction: row;
+            gap: 20px;
+            align-items: flex-start;
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="d-flex flex-column h-100">
+            <div class="logo">Instagram</div>
+            
+            <nav class="flex-grow-1">
+                <a href="#" class="nav-item"><i class="fas fa-home"></i>Home</a>
+                <a href="#" class="nav-item"><i class="fas fa-search"></i>Search</a>
+                <a href="#" class="nav-item"><i class="far fa-compass"></i>Explore</a>
+                <a href="#" class="nav-item"><i class="fas fa-video"></i>Reels</a>
+                <a href="#" class="nav-item position-relative"><i class="far fa-comment"></i>Messages <span class="notification-dot"></span></a>
+                <a href="#" class="nav-item position-relative"><i class="far fa-heart"></i>Notifications <span class="notification-dot"></span></a>
+                <a href="#" class="nav-item"><i class="far fa-plus-square"></i>Create</a>
+                <a href="#" class="nav-item"><i class="far fa-user"></i>Profile</a>
+            </nav>
+            
+            <div class="mt-auto">
+                <a href="#" class="nav-item"><i class="fas fa-bars"></i>More</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Profile Header -->
+        <div class="profile-header">
+            <div class="row align-items-center">
+                <div class="col-md-4 text-center position-relative">
+                    <img id="profileImage" src="foto.jpg" alt="Profile Picture" class="profile-pic">
+                    <input type="file" id="uploadProfile" accept="image/*" style="display:none;">
+                    <label for="uploadProfile" class="position-absolute bottom-0 start-50 translate-middle-x mb-2" style="cursor:pointer;">
+                        <i class="fas fa-camera" style="font-size:20px; color:white; background:#262626; padding:8px; border-radius:50%;"></i>
+                    </label>
+                </div>
+                <div class="col-md-8">
+                    <div class="d-flex align-items-center mb-3">
+                        <h1 class="h4 me-4 mb-0">Wellysaverdalena</h1>
+                        <button class="btn btn-follow me-2">Edit profil</button>
+                        <button class="btn btn-message me-2">View archive</button>
+                        <i class="fas fa-cog ms-3" style ="font-size: 24px; cursor: pointer;"></i>
+                    </div>
+                    
+                    <div class="profile-stats mb-3">
+                        <span><strong class="number">37</strong> posts</span>
+                        <span><strong class="number">634</strong> followers</span>
+                        <span><strong class="number">376</strong> following</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Story Highlights -->
+            <div class="story-highlights">
+                <div id="highlightContainer">
+                    <!-- Tombol New -->
+                    <div class="highlight-item text-center">
+                        <div class="highlight-circle" onclick="document.getElementById('uploadHighlight').click();">
+                            <i class="fas fa-plus"></i>
+                        </div>
+                        <div class="highlight-name">New</div>
+                    </div>
+                </div>
+                <input type="file" id="uploadHighlight" accept="image/*" style="display:none;">
+            </div>
+        </div>
+
+        <!-- Profile Tabs -->
+        <div class="profile-tabs">
+            <a href="#" class="profile-tab active"><i class="fas fa-th"></i>Posts</a>
+            <a href="#" class="profile-tab"><i class="fas fa-video"></i>Reels</a>
+            <a href="#" class="profile-tab"><i class="fas fa-bookmark"></i>Saved</a>
+            <a href="#" class="profile-tab"><i class="fas fa-user-tag"></i>Tagged</a>
+        </div>
+
+        <!-- Tombol Upload Foto -->
+        <div class="d-flex justify-content-end align-items-center mb-3" style="max-width:935px; margin:0 auto; padding:0 20px;">
+            <label for="uploadPost" class="btn btn-primary" style="background:#0095f6; border:none;">
+                <i class="fas fa-plus"></i>
+                <!-- Sembunyikan tulisan Upload Foto -->
+                <span style="display:none;">Upload Foto</span>
+            </label>
+            <input type="file" id="uploadPost" accept="image/*" style="display:none;">
+        </div>
+
+        <!-- Posts Grid -->
+        <div class="posts-grid mt-4 pb-5" id="postsGrid">
+            <div class="post-item"><div class="post-placeholder"><i class="fas fa-camera fa-2x"></i></div></div>
+            <div class="post-item"><div class="post-placeholder"><i class="fas fa-camera fa-2x"></i></div></div>
+            <div class="post-item"><div class="post-placeholder"><i class="fas fa-camera fa-2x"></i></div></div>
+        </div>
+    </div>
+
+    <!-- Script Upload Foto -->
+    <script>
+        // Upload foto profil
+        const uploadInput = document.getElementById("uploadProfile");
+        const profileImage = document.getElementById("profileImage");
+
+        uploadInput.addEventListener("change", function() {
+            const file = this.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    profileImage.src = e.target.result;
+                }
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Upload highlight
+        const highlightInput = document.getElementById("uploadHighlight");
+        const highlightContainer = document.getElementById("highlightContainer");
+
+        highlightInput.addEventListener("change", function() {
+            const file = this.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const highlightName = prompt("Masukkan nama highlight:", "Highlight");
+                    const finalName = highlightName ? highlightName : "Highlight";
+
+                    const newHighlight = document.createElement("div");
+                    newHighlight.classList.add("highlight-item");
+                    newHighlight.innerHTML = `
+                        <div class="delete-highlight">&times;</div>
+                        <img src="${e.target.result}" class="highlight-pic">
+                        <div class="highlight-name">${finalName}</div>
+                    `;
+
+                    newHighlight.querySelector(".delete-highlight").addEventListener("click", function() {
+                        newHighlight.remove();
+                    });
+
+                    // Tambahkan highlight baru di samping tombol New
+                    highlightContainer.appendChild(newHighlight);
+                }
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Upload foto postingan
+        const uploadPostInput = document.getElementById("uploadPost");
+        const postsGrid = document.getElementById("postsGrid");
+
+        uploadPostInput.addEventListener("change", function() {
+            const file = this.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    // Buat elemen post baru
+                    const newPost = document.createElement("div");
+                    newPost.classList.add("post-item");
+                    newPost.innerHTML = `<img src="${e.target.result}" style="width:100%;height:100%;object-fit:cover;">`;
+                    // Tambahkan ke grid paling depan
+                    postsGrid.prepend(newPost);
+                }
+                reader.readAsDataURL(file);
+            }
+        });
+    </script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
